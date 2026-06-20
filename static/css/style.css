@@ -1,0 +1,64 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#111;
+    color:white;
+    font-family:Arial, sans-serif;
+}
+
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 50px;
+    background:black;
+}
+
+.logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#ff4444;
+}
+
+ul{
+    display:flex;
+    list-style:none;
+}
+
+ul li{
+    margin-left:30px;
+}
+
+ul li a{
+    color:white;
+    text-decoration:none;
+}
+
+.hero{
+    text-align:center;
+    margin-top:150px;
+}
+
+.hero h1{
+    font-size:50px;
+    margin-bottom:20px;
+}
+
+.hero p{
+    font-size:20px;
+    margin-bottom:30px;
+}
+
+button{
+    background:#ff4444;
+    color:white;
+    border:none;
+    padding:15px 30px;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:18px;
+}
