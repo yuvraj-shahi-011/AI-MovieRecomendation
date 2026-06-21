@@ -93,3 +93,12 @@ button{
     width:100%;
     border-radius:10px;
 }
+.movie-card{
+    width:250px;
+    text-align:center;
+    transition:0.3s;
+}
+
+.movie-card:hover{
+    transform:scale(1.08);
+}
