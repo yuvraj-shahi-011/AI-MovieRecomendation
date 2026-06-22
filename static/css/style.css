@@ -102,3 +102,33 @@ button{
 .movie-card:hover{
     transform:scale(1.08);
 }
+.movies{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:30px;
+    padding:50px;
+}
+
+.movie-card{
+    width:220px;
+    transition:0.3s;
+}
+
+.movie-card:hover{
+    transform:scale(1.05);
+}
+
+.movie-card img{
+    width:100%;
+    border-radius:10px;
+}
+
+.movie-card h3{
+    margin-top:10px;
+    text-align:center;
+}
+
+.movie-card p{
+    text-align:center;
+}
