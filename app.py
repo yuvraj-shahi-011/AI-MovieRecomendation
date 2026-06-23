@@ -1,30 +1,66 @@
-from flask import Flask, render_template
-import requests
+from flask import Flask, render_template, request, redirect
+import sqlite3
 
 app = Flask(__name__)
-
-API_KEY = "YOUR_API_KEY"
 
 @app.route("/")
 def home():
 
-    trending_url = f"https://api.themoviedb.org/3/trending/movie/week?api_key={API_KEY}"
-    popular_url = f"https://api.themoviedb.org/3/movie/popular?api_key={API_KEY}"
-    top_url = f"https://api.themoviedb.org/3/movie/top_rated?api_key={API_KEY}"
-    upcoming_url = f"https://api.themoviedb.org/3/movie/upcoming?api_key={API_KEY}"
-
-    trending = requests.get(trending_url).json()["results"]
-    popular = requests.get(popular_url).json()["results"]
-    top_rated = requests.get(top_url).json()["results"]
-    upcoming = requests.get(upcoming_url).json()["results"]
+    popular = [
+    {
+        "title": "The Dark Knight",
+        "vote_average": 9.0,
+        "poster_path": "/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
+    },
+    {
+        "title": "Avengers: Endgame",
+        "vote_average": 8.8,
+        "poster_path": "/or06FN3Dka5tukK1e9sl16pB3iy.jpg"
+    },
+    {
+        "title": "Joker",
+        "vote_average": 8.4,
+        "poster_path": "/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg"
+    },
+    {
+    "title": "Batman Begins",
+    "vote_average": 8.2,
+    "poster_path": "/4MpN4kIEqUjW8OPtOQJXlTdHiJV.jpg"
+}
+    
+]
 
     return render_template(
         "index.html",
-        trending=trending,
-        popular=popular,
-        top_rated=top_rated,
-        upcoming=upcoming
+        popular=popular
     )
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+
+    if request.method == "POST":
+
+        username = request.form["username"]
+        email = request.form["email"]
+        password = request.form["password"]
+
+        conn = sqlite3.connect("movies.db")
+
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO users(username,email,password)
+            VALUES(?,?,?)
+            """,
+            (username, email, password)
+        )
+
+        conn.commit()
+        conn.close()
+
+        return redirect("/")
+
+    return render_template("register.html")
 if __name__ == "__main__":
     app.run(debug=True)
