@@ -1,46 +1,58 @@
 from flask import Flask, render_template, request, redirect, session
+from dotenv import load_dotenv
+from pathlib import Path
 import sqlite3
+import requests
+import os
+
+# Load .env from same folder as app.py
+env_path = Path(__file__).parent / ".env"
+load_dotenv(dotenv_path=env_path)
+
+OMDB_API_KEY = os.getenv("OMDB_API_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
+
+print("ENV FILE:", env_path)
+print("OMDB_API_KEY =", OMDB_API_KEY)
+print("SECRET_KEY =", SECRET_KEY)
 
 app = Flask(__name__)
-
-# Secret Key for Session
-app.secret_key = "moviehub_secret_key"
+app.secret_key = SECRET_KEY
 
 
 # HOME PAGE
 @app.route("/")
 def home():
 
-    popular = [
-        {
-            "title": "The Dark Knight",
-            "vote_average": 9.0,
-            "poster_path": "/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
-        },
-        {
-            "title": "Avengers: Endgame",
-            "vote_average": 8.8,
-            "poster_path": "/or06FN3Dka5tukK1e9sl16pB3iy.jpg"
-        },
-        {
-            "title": "Joker",
-            "vote_average": 8.4,
-            "poster_path": "/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg"
-        },
-        {
-            "title": "Batman Begins",
-            "vote_average": 8.2,
-            "poster_path": "/4MpN4kIEqUjW8OPtOQJXlTdHiJV.jpg"
-        }
+    movie_names = [
+        "The Dark Knight",
+        "Interstellar",
+        "Joker",
+        "Avengers: Endgame"
     ]
+
+    popular = []
+
+    for name in movie_names:
+        try:
+            url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={name}"
+            response = requests.get(url, timeout=10)
+            data = response.json()
+
+            if data.get("Response") == "True":
+                popular.append({
+                    "title": data.get("Title"),
+                    "poster": data.get("Poster")
+                })
+
+        except Exception as e:
+            print("Error:", e)
 
     return render_template(
         "index.html",
         popular=popular,
         user=session.get("user")
     )
-
-
 # REGISTER
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -95,13 +107,10 @@ def login():
         conn.close()
 
         if user:
-
             session["user"] = user[1]
-
             return redirect("/")
 
-        else:
-            return "Invalid Email or Password"
+        return "Invalid Email or Password"
 
     return render_template("login.html")
 
@@ -115,5 +124,33 @@ def logout():
     return redirect("/")
 
 
+# SEARCH
+@app.route("/search")
+def search():
+
+    movie = None
+
+    movie_name = request.args.get("movie")
+
+    if movie_name:
+
+        try:
+            url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={movie_name}"
+
+            response = requests.get(url, timeout=10)
+
+            movie = response.json()
+
+            if movie.get("Response") == "False":
+                movie = None
+
+        except Exception as e:
+            print("Search Error:", e)
+            movie = None
+
+    return render_template(
+        "search.html",
+        movie=movie
+    )
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,77 +1,62 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MovieHub AI</title>
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-
 <body>
 
-    <nav>
+<nav class="navbar">
+    <div class="logo">
+        🎬 MovieHub AI
+    </div>
 
-        <div class="logo">
-            🎬 MovieHub AI
-        </div>
+    <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/search">Search</a></li>
+        <li><a href="/register">Register</a></li>
+        <li><a href="/login">Login</a></li>
+    </ul>
+</nav>
 
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="#">Movies</a></li>
-            <li><a href="#">Watchlist</a></li>
-            <li><a href="#">Login</a></li>
-        </ul>
+<section class="hero">
 
-    </nav>
+    <h1>Discover Your Next Favorite Movie</h1>
 
-    <section class="hero">
+    <p>AI Powered Movie Recommendation Platform</p>
 
-        <h1>
-            Discover Your Next Favorite Movie
-        </h1>
+    <form action="/search" method="GET" class="search-box">
+        <input
+            type="text"
+            name="movie"
+            placeholder="Search Movies..."
+            required>
 
-        <p>
-            AI Powered Movie Recommendation Platform
-        </p>
+        <button type="submit">
+            Search
+        </button>
+    </form>
 
-        <div class="search-box">
+</section>
 
-            <input
-                type="text"
-                placeholder="Search Movies..."
-            >
+<section class="movies-section">
 
-            <button>
-                Search
-            </button>
+    <h2>🎥 Popular Movies</h2>
 
-        </div>
-
-    </section>
-
-    <h2 class="section-title">
-        🎬 Popular Movies
-    </h2>
-
-    <div class="movies">
+    <div class="movie-grid">
 
         {% for movie in popular %}
 
         <div class="movie-card">
 
-            <img
-                src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
-                alt="{{ movie.title }}"
-            >
+            <img src="{{ movie.poster }}"
+                 alt="{{ movie.title }}">
 
-            <h3>
-                {{ movie.title }}
-            </h3>
-
-            <p>
-                ⭐ {{ movie.vote_average }}
-            </p>
+            <h3>{{ movie.title }}</h3>
 
         </div>
 
@@ -79,6 +64,7 @@
 
     </div>
 
-</body>
+</section>
 
+</body>
 </html>

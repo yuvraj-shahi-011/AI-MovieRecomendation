@@ -1,40 +1,42 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Register</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-<h1>Register</h1>
+{% block title %}
+Register
+{% endblock %}
 
-<form method="POST">
+{% block content %}
 
-    <input type="text"
-           name="username"
-           placeholder="Username"
-           required>
+<div class="auth-container">
 
-    <br><br>
+    <div class="auth-card">
 
-    <input type="email"
-           name="email"
-           placeholder="Email"
-           required>
+        <h1>Create Account</h1>
 
-    <br><br>
+        <form method="POST">
 
-    <input type="password"
-           name="password"
-           placeholder="Password"
-           required>
+            <input type="text"
+                   name="username"
+                   placeholder="Username"
+                   required>
 
-    <br><br>
+            <input type="email"
+                   name="email"
+                   placeholder="Email"
+                   required>
 
-    <button type="submit">
-        Register
-    </button>
+            <input type="password"
+                   name="password"
+                   placeholder="Password"
+                   required>
 
-</form>
+            <button type="submit">
+                Register
+            </button>
 
-</body>
-</html>
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

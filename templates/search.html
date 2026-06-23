@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}
+Search Movies
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>Search Movies</h1>
+
+    <form action="/search" method="GET" class="search-box">
+
+        <input
+            type="text"
+            name="movie"
+            placeholder="Enter Movie Name"
+            required>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+</section>
+
+{% if movie and movie.Response == "True" %}
+
+<section class="movies-section">
+
+    <div class="movie-card" style="max-width:700px;margin:auto;">
+
+        <img src="{{ movie.Poster }}"
+             alt="{{ movie.Title }}">
+
+        <h2>{{ movie.Title }}</h2>
+
+        <p>⭐ IMDb Rating: {{ movie.imdbRating }}</p>
+
+        <p>📅 Year: {{ movie.Year }}</p>
+
+        <p>🎭 Genre: {{ movie.Genre }}</p>
+
+        <p>🎬 Director: {{ movie.Director }}</p>
+
+        <p><strong>Actors:</strong> {{ movie.Actors }}</p>
+
+        <p>{{ movie.Plot }}</p>
+
+    </div>
+
+</section>
+
+{% elif movie and movie.Response == "False" %}
+
+<section class="movies-section">
+
+    <div class="movie-card">
+
+        <h2>Movie Not Found</h2>
+
+        <p>Try another movie name.</p>
+
+    </div>
+
+</section>
+
+{% endif %}
+
+{% endblock %}
