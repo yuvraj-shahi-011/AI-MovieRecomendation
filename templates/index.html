@@ -1,48 +1,84 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>MovieHub AI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
 
-<nav>
-    <div class="logo">🎬 MovieHub AI</div>
+    <nav>
 
-    <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Movies</a></li>
-        <li><a href="#">Reviews</a></li>
-        <li><a href="#">Login</a></li>
-    </ul>
-</nav>
+        <div class="logo">
+            🎬 MovieHub AI
+        </div>
 
-<section class="hero">
-    <h1>Discover Your Next Favorite Movie</h1>
-    <p>AI Powered Movie Recommendation Platform</p>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#">Movies</a></li>
+            <li><a href="#">Watchlist</a></li>
+            <li><a href="#">Login</a></li>
+        </ul>
 
-    <div class="search-box">
-        <input type="text" placeholder="Search Movies...">
-        <button>Search</button>
+    </nav>
+
+    <section class="hero">
+
+        <h1>
+            Discover Your Next Favorite Movie
+        </h1>
+
+        <p>
+            AI Powered Movie Recommendation Platform
+        </p>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                placeholder="Search Movies..."
+            >
+
+            <button>
+                Search
+            </button>
+
+        </div>
+
+    </section>
+
+    <h2 class="section-title">
+        🎬 Popular Movies
+    </h2>
+
+    <div class="movies">
+
+        {% for movie in popular %}
+
+        <div class="movie-card">
+
+            <img
+                src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}"
+                alt="{{ movie.title }}"
+            >
+
+            <h3>
+                {{ movie.title }}
+            </h3>
+
+            <p>
+                ⭐ {{ movie.vote_average }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
     </div>
-</section>
-<section class="movies">
-
-    {% for movie in movies %}
-
-    <div class="movie-card">
-
-        <img src="https://image.tmdb.org/t/p/w500{{ movie.poster_path }}">
-
-        <h3>{{ movie.title }}</h3>
-
-        <p>⭐ {{ movie.vote_average }}</p>
-
-    </div>
-
-    {% endfor %}
-
-</section>
 
 </body>
+
 </html>
