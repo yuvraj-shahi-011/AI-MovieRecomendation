@@ -24,6 +24,9 @@ app.secret_key = SECRET_KEY
 @app.route("/")
 def home():
 
+    if "user" not in session:
+        return redirect("/login")
+
     movie_names = [
         "The Dark Knight",
         "Interstellar",
@@ -34,25 +37,31 @@ def home():
     popular = []
 
     for name in movie_names:
+
         try:
+
             url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={name}"
+
             response = requests.get(url, timeout=10)
+
             data = response.json()
 
             if data.get("Response") == "True":
+
                 popular.append({
-                    "title": data.get("Title"),
-                    "poster": data.get("Poster")
+                    "title": data["Title"],
+                    "poster": data["Poster"]
                 })
 
         except Exception as e:
-            print("Error:", e)
+            print(e)
 
     return render_template(
         "index.html",
         popular=popular,
         user=session.get("user")
     )
+
 # REGISTER
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -79,7 +88,10 @@ def register():
 
         return redirect("/login")
 
-    return render_template("register.html")
+    return render_template(
+    "register.html",
+    user=session.get("user")
+)
 
 
 # LOGIN
@@ -112,7 +124,10 @@ def login():
 
         return "Invalid Email or Password"
 
-    return render_template("login.html")
+    return render_template(
+    "login.html",
+    user=session.get("user")
+)
 
 
 # LOGOUT
@@ -121,12 +136,15 @@ def logout():
 
     session.pop("user", None)
 
-    return redirect("/")
+    return redirect("/login")
 
 
 # SEARCH
 @app.route("/search")
 def search():
+
+    if "user" not in session:
+        return redirect("/login")
 
     movie = None
 
@@ -134,23 +152,17 @@ def search():
 
     if movie_name:
 
-        try:
-            url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={movie_name}"
+        url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={movie_name}"
 
-            response = requests.get(url, timeout=10)
+        response = requests.get(url)
 
-            movie = response.json()
-
-            if movie.get("Response") == "False":
-                movie = None
-
-        except Exception as e:
-            print("Search Error:", e)
-            movie = None
+        movie = response.json()
 
     return render_template(
         "search.html",
-        movie=movie
+        movie=movie,
+        user=session.get("user")
     )
+
 if __name__ == "__main__":
     app.run(debug=True)
