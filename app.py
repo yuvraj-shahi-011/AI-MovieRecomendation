@@ -1,26 +1,43 @@
 from flask import Flask, render_template, request, redirect, session
 from dotenv import load_dotenv
 from pathlib import Path
-import sqlite3
+import psycopg2
 import requests
 import os
 
-# Load .env from same folder as app.py
+# =========================
+# LOAD ENV VARIABLES
+# =========================
+
 env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path)
 
 OMDB_API_KEY = os.getenv("OMDB_API_KEY")
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-print("ENV FILE:", env_path)
-print("OMDB_API_KEY =", OMDB_API_KEY)
-print("SECRET_KEY =", SECRET_KEY)
-
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 
 
+# =========================
+# DATABASE CONNECTION
+# =========================
+
+def get_db_connection():
+    conn = psycopg2.connect(
+        host=os.getenv("DB_HOST"),
+        database=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        port=os.getenv("DB_PORT")
+    )
+    return conn
+
+
+# =========================
 # HOME PAGE
+# =========================
+
 @app.route("/")
 def home():
 
@@ -54,7 +71,7 @@ def home():
                 })
 
         except Exception as e:
-            print(e)
+            print("Movie Error:", e)
 
     return render_template(
         "index.html",
@@ -62,7 +79,11 @@ def home():
         user=session.get("user")
     )
 
+
+# =========================
 # REGISTER
+# =========================
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
 
@@ -72,29 +93,39 @@ def register():
         email = request.form["email"]
         password = request.form["password"]
 
-        conn = sqlite3.connect("movies.db")
-        cursor = conn.cursor()
+        try:
 
-        cursor.execute(
-            """
-            INSERT INTO users(username,email,password)
-            VALUES(?,?,?)
-            """,
-            (username, email, password)
-        )
+            conn = get_db_connection()
+            cursor = conn.cursor()
 
-        conn.commit()
-        conn.close()
+            cursor.execute(
+                """
+                INSERT INTO users (username, email, password)
+                VALUES (%s, %s, %s)
+                """,
+                (username, email, password)
+            )
 
-        return redirect("/login")
+            conn.commit()
+
+            cursor.close()
+            conn.close()
+
+            return redirect("/login")
+
+        except Exception as e:
+            return f"Registration Error: {e}"
 
     return render_template(
-    "register.html",
-    user=session.get("user")
-)
+        "register.html",
+        user=session.get("user")
+    )
 
 
+# =========================
 # LOGIN
+# =========================
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
@@ -103,34 +134,45 @@ def login():
         email = request.form["email"]
         password = request.form["password"]
 
-        conn = sqlite3.connect("movies.db")
-        cursor = conn.cursor()
+        try:
 
-        cursor.execute(
-            """
-            SELECT * FROM users
-            WHERE email=? AND password=?
-            """,
-            (email, password)
-        )
+            conn = get_db_connection()
+            cursor = conn.cursor()
 
-        user = cursor.fetchone()
+            cursor.execute(
+                """
+                SELECT * FROM users
+                WHERE email=%s AND password=%s
+                """,
+                (email, password)
+            )
 
-        conn.close()
+            user = cursor.fetchone()
 
-        if user:
-            session["user"] = user[1]
-            return redirect("/")
+            cursor.close()
+            conn.close()
 
-        return "Invalid Email or Password"
+            if user:
+
+                session["user"] = user[1]
+
+                return redirect("/")
+
+            return "Invalid Email or Password"
+
+        except Exception as e:
+            return f"Login Error: {e}"
 
     return render_template(
-    "login.html",
-    user=session.get("user")
-)
+        "login.html",
+        user=session.get("user")
+    )
 
 
+# =========================
 # LOGOUT
+# =========================
+
 @app.route("/logout")
 def logout():
 
@@ -139,7 +181,10 @@ def logout():
     return redirect("/login")
 
 
-# SEARCH
+# =========================
+# SEARCH MOVIES
+# =========================
+
 @app.route("/search")
 def search():
 
@@ -152,17 +197,27 @@ def search():
 
     if movie_name:
 
-        url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={movie_name}"
+        try:
 
-        response = requests.get(url)
+            url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={movie_name}"
 
-        movie = response.json()
+            response = requests.get(url, timeout=10)
+
+            movie = response.json()
+
+        except Exception as e:
+            print("Search Error:", e)
 
     return render_template(
         "search.html",
         movie=movie,
         user=session.get("user")
     )
+
+
+# =========================
+# RUN APP
+# =========================
 
 if __name__ == "__main__":
     app.run(debug=True)
