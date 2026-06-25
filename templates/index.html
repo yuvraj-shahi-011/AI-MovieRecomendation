@@ -36,14 +36,12 @@ MovieHub AI
 
         {% for movie in popular %}
 
+       <a href="/movie/{{ movie['imdb_id'] }}" class="movie-link">
         <div class="movie-card">
-
             <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-
             <h3>{{ movie.title }}</h3>
-
         </div>
-
+    </a>
         {% endfor %}
 
     </div>

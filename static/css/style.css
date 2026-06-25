@@ -267,3 +267,115 @@ form button{
     background:#b52a37;
     transform:scale(1.05);
 }
+
+.flash{
+    width:80%;
+    margin:20px auto;
+    padding:15px;
+    border-radius:8px;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.success{
+    background:#28a745;
+    color:white;
+}
+
+.warning{
+    background:#ffc107;
+    color:black;
+}
+
+.danger{
+    background:#dc3545;
+    color:white;
+}
+.movie-detail{
+    display:flex;
+    gap:40px;
+    max-width:1200px;
+    margin:50px auto;
+    padding:20px;
+    align-items:flex-start;
+}
+
+.movie-detail img{
+    width:320px;
+    border-radius:15px;
+    box-shadow:0 10px 25px rgba(0,0,0,.5);
+}
+
+.movie-info{
+    flex:1;
+}
+
+.movie-info h1{
+    font-size:42px;
+    margin-bottom:20px;
+}
+
+.movie-info p{
+    font-size:18px;
+    line-height:1.8;
+    margin-bottom:10px;
+}
+
+.movie-info form{
+    margin-top:30px;
+}
+
+.movie-info button{
+    background:#ff3b30;
+    color:white;
+    border:none;
+    padding:14px 28px;
+    border-radius:8px;
+    font-size:17px;
+    cursor:pointer;
+}
+
+.movie-info button:hover{
+    background:#e52d27;
+}
+@media (max-width:768px){
+
+    .movie-detail{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .movie-detail img{
+        margin:auto;
+    }
+
+}
+.movie-link{
+    text-decoration:none;
+    color:white;
+}
+
+.movie-link h3{
+    color:white;
+    margin:15px 0;
+    font-size:24px;
+}
+
+.movie-link:hover h3{
+    color:#ff3b30;
+}
+.watchlist-btn{
+    background:#ff3b30;
+    color:white;
+    border:none;
+    padding:14px 28px;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.watchlist-btn:hover{
+    background:#e52d27;
+}

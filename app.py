@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, flash
 from dotenv import load_dotenv
 from pathlib import Path
 import psycopg2
@@ -62,12 +62,13 @@ def home():
             response = requests.get(url, timeout=10)
 
             data = response.json()
-
+            print(data)
             if data.get("Response") == "True":
 
                 popular.append({
                     "title": data["Title"],
-                    "poster": data["Poster"]
+                    "poster": data["Poster"],
+                    "imdb_id": data["imdbID"]
                 })
 
         except Exception as e:
@@ -111,11 +112,11 @@ def register():
 
             cursor.close()
             conn.close()
-
+            flash("Registration successful!", "success")
             return redirect("/login")
 
         except Exception as e:
-            return f"Registration Error: {e}"
+            flash(f"Registration Error: {e}", "error")
 
     return render_template(
         "register.html",
@@ -157,9 +158,9 @@ def login():
             if user:
                 session["user"] = user[0]
                 return redirect("/")
-            return "Invalid Email or Password"
+            flash("Invalid Email or Password", "error")
         except Exception as e:
-            return f"Login Error: {e}"
+            flash(f"Login Error: {e}", "error")
 
     return render_template(
         "login.html",
@@ -213,6 +214,32 @@ def search():
     )
 
 # =========================
+# MOVIE DETAIL
+# =========================
+
+@app.route("/movie/<imdb_id>")
+def movie_detail(imdb_id):
+
+    if "user" not in session:
+        return redirect("/login")
+
+    url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&i={imdb_id}"
+
+    try:
+        response = requests.get(url, timeout=10)
+        movie = response.json()
+
+    except Exception as e:
+        print("Movie Detail Error:", e)
+        movie = None
+
+    return render_template(
+        "movie.html",
+        movie=movie,
+        user=session.get("user")
+    )
+
+# =========================
 # ADD_TO_WATCHLIST
 # =========================
 
@@ -245,6 +272,7 @@ def add_watchlist():
     if existing:
         cursor.close()
         conn.close()
+        flash("Movie already in watchlist!", "error")
         return redirect("/search?movie=" + title)
 
     # Insert movie
@@ -262,6 +290,7 @@ def add_watchlist():
     cursor.close()
     conn.close()
 
+    flash("Movie added to watchlist!", "success")
     return redirect("/watchlist")
 
 # =========================
@@ -291,6 +320,7 @@ def remove_watchlist(imdb_id):
     cursor.close()
     conn.close()
 
+    flash("Movie removed from watchlist!", "danger")
     return redirect("/watchlist")
 
 # =========================

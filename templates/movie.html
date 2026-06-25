@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ movie.Title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="movie-detail">
+    <img src="{{ movie.Poster }}" alt="{{ movie.Title }}">
+    <div class="movie-info">
+        <h1>{{ movie.Title }}</h1>
+        <p><strong>Year:</strong> {{ movie.Year }}</p>
+        <p><strong>Genre:</strong> {{ movie.Genre }}</p>
+        <p><strong>Runtime:</strong> {{ movie.Runtime }}</p>
+        <p><strong>IMDb Rating:</strong> ⭐ {{ movie.imdbRating }}</p>
+        <p><strong>Director:</strong> {{ movie.Director }}</p>
+        <p><strong>Actors:</strong> {{ movie.Actors }}</p>
+        <p><strong>Plot:</strong></p>
+        <p>{{ movie.Plot }}</p>
+        <form action="/add_watchlist" method="POST">
+            <input type="hidden" name="title" value="{{ movie.Title }}">
+            <input type="hidden" name="poster" value="{{ movie.Poster }}">
+            <input type="hidden" name="imdb_id" value="{{ movie.imdbID }}">
+            <button type="submit" class="watchlist-btn">
+                ⭐ Add to Watchlist
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
