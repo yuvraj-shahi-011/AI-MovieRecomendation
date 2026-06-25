@@ -23,6 +23,11 @@ My Watchlist
         <div class="movie-card">
 
             <img src="{{ movie[1] }}" alt="{{ movie[0] }}">
+            <a href="/remove_watchlist/{{ movie[2] }}">
+                <button class="remove-btn">
+                    🗑 Remove
+                </button>
+            </a>
 
             <h3>{{ movie[0] }}</h3>
 

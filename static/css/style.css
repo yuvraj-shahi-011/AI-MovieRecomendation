@@ -252,3 +252,18 @@ form button{
 .logout-btn:hover{
     color:white;
 }
+.remove-btn{
+    margin-top:15px;
+    padding:12px 20px;
+    background:#dc3545;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.remove-btn:hover{
+    background:#b52a37;
+    transform:scale(1.05);
+}

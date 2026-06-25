@@ -229,6 +229,25 @@ def add_watchlist():
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    # Check if movie already exists
+    cursor.execute(
+        """
+        SELECT id
+        FROM watchlist
+        WHERE username=%s
+        AND imdb_id=%s
+        """,
+        (session["user"], imdb_id)
+    )
+
+    existing = cursor.fetchone()
+
+    if existing:
+        cursor.close()
+        conn.close()
+        return redirect("/search?movie=" + title)
+
+    # Insert movie
     cursor.execute(
         """
         INSERT INTO watchlist
@@ -236,6 +255,35 @@ def add_watchlist():
         VALUES (%s, %s, %s, %s)
         """,
         (session["user"], title, poster, imdb_id)
+    )
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect("/watchlist")
+
+# =========================
+# REMOVE FROM WATCHLIST
+# =========================
+
+@app.route("/remove_watchlist/<imdb_id>")
+def remove_watchlist(imdb_id):
+
+    if "user" not in session:
+        return redirect("/login")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        DELETE FROM watchlist
+        WHERE username=%s
+        AND imdb_id=%s
+        """,
+        (session["user"], imdb_id)
     )
 
     conn.commit()
@@ -259,11 +307,11 @@ def watchlist():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT movie_title, poster
+        SELECT movie_title, poster, imdb_id
         FROM watchlist
         WHERE username=%s
         ORDER BY created_at DESC
-    """, (session["user"],))
+        """, (session["user"],))
 
     movies = cursor.fetchall()
 
