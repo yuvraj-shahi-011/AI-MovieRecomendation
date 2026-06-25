@@ -221,6 +221,34 @@ form button{
 }
 
 .logout-btn{
-    color:#ff3b3b !important;
+    color:#ff3b3b;
     font-weight:bold;
+}
+.watch-btn{
+    margin-top:20px;
+    padding:14px 25px;
+    background:#ff3b3b;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+    transition:.3s;
+}
+.watch-btn:hover{
+    background:#ff1f1f;
+    transform:scale(1.05);
+}
+.username{
+    color:#ff3b3b;
+    font-weight:bold;
+    margin-left:20px;
+}
+
+.logout-btn{
+    color:#ff3b3b;
+}
+
+.logout-btn:hover{
+    color:white;
 }

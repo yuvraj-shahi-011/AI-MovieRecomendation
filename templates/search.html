@@ -23,6 +23,25 @@ Search Movies
         </button>
 
     </form>
+    <form action="/add_watchlist" method="POST">
+
+    <input type="hidden"
+           name="title"
+           value="{{ movie.Title }}">
+
+    <input type="hidden"
+           name="poster"
+           value="{{ movie.Poster }}">
+
+    <input type="hidden"
+           name="imdb_id"
+           value="{{ movie.imdbID }}">
+
+    <button class="watch-btn">
+        ⭐ Add To Watchlist
+    </button>
+
+</form>
 
 </section>
 
@@ -48,6 +67,19 @@ Search Movies
         <p><strong>Actors:</strong> {{ movie.Actors }}</p>
 
         <p>{{ movie.Plot }}</p>
+        <form action="/add_watchlist" method="POST">
+
+            <input type="hidden" name="title" value="{{ movie.Title }}">
+
+            <input type="hidden" name="poster" value="{{ movie.Poster }}">
+
+            <input type="hidden" name="imdb_id" value="{{ movie.imdbID }}">
+
+            <button class="watch-btn" type="submit">
+                ⭐ Add To Watchlist
+            </button>
+
+        </form>
 
     </div>
 

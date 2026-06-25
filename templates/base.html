@@ -17,21 +17,16 @@
     </div>
 
     <ul class="nav-links">
-
     <li><a href="/">Home</a></li>
-
     <li><a href="/search">Search</a></li>
 
     {% if user %}
 
+        <li><a href="/watchlist">⭐ Watchlist</a></li>
         <li>
-            <span style="color:#ff3b3b;">
-                👋 {{ user }}
-            </span>
-        </li>
-
-        <li>
-            <a href="/logout">Logout</a>
+            <a href="/logout" class="logout-btn">
+                Logout
+            </a>
         </li>
 
     {% else %}
@@ -41,6 +36,7 @@
         <li><a href="/login">Login</a></li>
 
     {% endif %}
+
 
 </ul>
 

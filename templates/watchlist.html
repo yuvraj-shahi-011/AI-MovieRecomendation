@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Watchlist
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>⭐ My Watchlist</h1>
+
+    <p>Your saved movies will appear here.</p>
+
+</section>
+
+<div class="movie-grid">
+
+    {% if movies %}
+
+        {% for movie in movies %}
+
+        <div class="movie-card">
+
+            <img src="{{ movie[1] }}" alt="{{ movie[0] }}">
+
+            <h3>{{ movie[0] }}</h3>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <h2 style="text-align:center; margin-top:40px;">
+            No movies in your watchlist yet.
+        </h2>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

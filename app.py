@@ -141,7 +141,8 @@ def login():
 
             cursor.execute(
                 """
-                SELECT * FROM users
+                SELECT username
+                FROM users
                 WHERE email=%s AND password=%s
                 """,
                 (email, password)
@@ -153,13 +154,9 @@ def login():
             conn.close()
 
             if user:
-
-                session["user"] = user[1]
-
+                session["user"] = user[0]
                 return redirect("/")
-
             return "Invalid Email or Password"
-
         except Exception as e:
             return f"Login Error: {e}"
 
@@ -214,6 +211,69 @@ def search():
         user=session.get("user")
     )
 
+# =========================
+# ADD_TO_WATCHLIST
+# =========================
+
+@app.route("/add_watchlist", methods=["POST"])
+def add_watchlist():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    title = request.form["title"]
+    poster = request.form["poster"]
+    imdb_id = request.form["imdb_id"]
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO watchlist
+        (username, movie_title, poster, imdb_id)
+        VALUES (%s, %s, %s, %s)
+        """,
+        (session["user"], title, poster, imdb_id)
+    )
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    return redirect("/watchlist")
+
+# =========================
+# WATCHLIST
+# =========================
+
+@app.route("/watchlist")
+def watchlist():
+
+    if "user" not in session:
+        return redirect("/login")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT movie_title, poster
+        FROM watchlist
+        WHERE username=%s
+        ORDER BY created_at DESC
+    """, (session["user"],))
+
+    movies = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "watchlist.html",
+        movies=movies,
+        user=session.get("user")
+    )
 
 # =========================
 # RUN APP
