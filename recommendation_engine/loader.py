@@ -19,4 +19,30 @@ def load_movies():
 
         print(f"Loaded {len(_movies)} movies")
 
+        # Fill missing values
+        feature_columns = [
+            "overview",
+            "genres",
+            "cast",
+            "director"
+        ]
+
+        for col in feature_columns:
+            _movies[col] = (
+                _movies[col]
+                .fillna("")
+                .astype(str)
+            )
+
+        # Create feature column
+        _movies["features"] = (
+            _movies["overview"]
+            + " "
+            + _movies["genres"]
+            + " "
+            + _movies["cast"]
+            + " "
+            + _movies["director"]
+        )
+
     return _movies
