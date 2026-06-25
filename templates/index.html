@@ -1,30 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MovieHub AI</title>
+{% extends "base.html" %}
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+{% block title %}
+MovieHub AI
+{% endblock %}
 
-<nav class="navbar">
-    <div class="logo">
-        🎬 MovieHub AI
-    </div>
-
-    <ul class="nav-links">
-        <li><a href="/">Home</a></li>
-        <li><a href="/search">Search</a></li>
-        <li><a href="/register">Register</a></li>
-        <li><a href="/login">Login</a></li>
-        <a href="/logout" class="logout-btn">
-    Logout
-</a>
-    </ul>
-</nav>
+{% block content %}
 
 <section class="hero">
 
@@ -33,6 +13,7 @@
     <p>AI Powered Movie Recommendation Platform</p>
 
     <form action="/search" method="GET" class="search-box">
+
         <input
             type="text"
             name="movie"
@@ -42,6 +23,7 @@
         <button type="submit">
             Search
         </button>
+
     </form>
 
 </section>
@@ -56,8 +38,7 @@
 
         <div class="movie-card">
 
-            <img src="{{ movie.poster }}"
-                 alt="{{ movie.title }}">
+            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
 
             <h3>{{ movie.title }}</h3>
 
@@ -69,5 +50,4 @@
 
 </section>
 
-</body>
-</html>
+{% endblock %}

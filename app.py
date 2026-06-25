@@ -72,6 +72,7 @@ def home():
 
         except Exception as e:
             print("Movie Error:", e)
+    print("HOME SESSION USER:", session.get("user"))        
 
     return render_template(
         "index.html",
