@@ -1,3 +1,4 @@
+dataset/processed_movies.csv
 .env
 venv/
 __pycache__/
