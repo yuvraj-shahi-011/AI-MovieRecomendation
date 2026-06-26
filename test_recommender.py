@@ -1,14 +1,24 @@
 from recommendation_engine.recommender import recommend_movies
+import time
 
-movie = input("Movie: ")
+imdb_id = input("IMDb ID: ")
 
-results = recommend_movies(movie)
+start = time.time()
+
+results = recommend_movies(imdb_id)
+
+end = time.time()
+
+print(f"\nTime Taken: {end-start:.2f} seconds\n")
 
 if results is None:
     print("Movie not found")
 else:
-    print(
-        results[
-            ["title", "vote_average", "score"]
+    print(results[
+        [
+            "title",
+            "imdb_id",
+            "vote_average",
+            "release_date"
         ]
-    )
+    ])

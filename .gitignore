@@ -1,4 +1,8 @@
-dataset/processed_movies.csv
-.env
 venv/
 __pycache__/
+*.pyc
+.env
+models/
+dataset/
+.vscode/
+.idea/

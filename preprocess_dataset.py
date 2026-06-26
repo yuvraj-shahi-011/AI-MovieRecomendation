@@ -12,6 +12,7 @@ print("Original Shape:", df.shape)
 # Keep only the columns needed for recommendations
 columns = [
     "id",
+    "imdb_id",
     "title",
     "overview",
     "genres",

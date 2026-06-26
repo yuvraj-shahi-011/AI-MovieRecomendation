@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, url_for
+from recommendation_engine.recommender import recommend_movies
 from dotenv import load_dotenv
 from pathlib import Path
 import psycopg2
@@ -190,28 +191,52 @@ def search():
     if "user" not in session:
         return redirect("/login")
 
-    movie = None
-
     movie_name = request.args.get("movie")
 
-    if movie_name:
+    if not movie_name:
+        return redirect("/")
 
-        try:
+    try:
 
-            url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={movie_name}"
+        url = (
+            f"https://www.omdbapi.com/"
+            f"?apikey={OMDB_API_KEY}"
+            f"&t={movie_name}"
+        )
 
-            response = requests.get(url, timeout=10)
+        response = requests.get(
+            url,
+            timeout=10
+        )
 
-            movie = response.json()
+        movie = response.json()
 
-        except Exception as e:
-            print("Search Error:", e)
+        if movie.get("Response") == "True":
 
-    return render_template(
-        "search.html",
-        movie=movie,
-        user=session.get("user")
-    )
+            return redirect(
+                url_for(
+                    "movie_detail",
+                    imdb_id=movie["imdbID"]
+                )
+            )
+
+        return render_template(
+            "search.html",
+            movie=None,
+            error="Movie not found.",
+            user=session.get("user")
+        )
+
+    except Exception as e:
+
+        print("Search Error:", e)
+
+        return render_template(
+            "search.html",
+            movie=None,
+            error="Something went wrong.",
+            user=session.get("user")
+        )
 
 # =========================
 # MOVIE DETAIL
@@ -225,10 +250,18 @@ def movie_detail(imdb_id):
 
     url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&i={imdb_id}"
 
+    recommendations = []
+
     try:
         response = requests.get(url, timeout=10)
         movie = response.json()
 
+        if movie.get("Response") == "True":
+            recommendations = recommend_movies(imdb_id)
+            if recommendations is not None:
+                recommendations = recommendations.to_dict(orient="records")
+            else:
+                recommendations = []
     except Exception as e:
         print("Movie Detail Error:", e)
         movie = None
@@ -236,6 +269,7 @@ def movie_detail(imdb_id):
     return render_template(
         "movie.html",
         movie=movie,
+        recommendations=recommendations,
         user=session.get("user")
     )
 

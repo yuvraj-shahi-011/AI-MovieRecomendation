@@ -1,7 +1,5 @@
 import pandas as pd
-
-DATASET_PATH = "dataset/processed_movies.csv"
-
+DATASET_PATH = "dataset/ai_movies.csv"
 # Cache variable
 _movies = None
 
@@ -10,7 +8,7 @@ def load_movies():
     global _movies
 
     if _movies is None:
-        print("Loading processed dataset...")
+        print("Loading AI dataset...")
 
         _movies = pd.read_csv(
             DATASET_PATH,

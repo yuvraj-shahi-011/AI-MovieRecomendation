@@ -1,52 +1,45 @@
-from sentence_transformers import util
+import faiss
 
-from recommendation_engine.loader import load_movies
-from recommendation_engine.embeddings import create_embeddings
-from recommendation_engine.candidate_filter import filter_candidates
+from recommendation_engine.embeddings import model
+from recommendation_engine.vector_store import load_vector_store
+from recommendation_engine.faiss_store import load_index
+
+movies, embeddings = load_vector_store()
+index = load_index()
 
 
-movies = load_movies()
+def recommend_movies(imdb_id, top_k=10):
 
-
-def recommend_movies(movie_title, top_k=10):
-    """
-    Recommend movies similar to the given movie.
-    """
-
-    candidates = filter_candidates(movie_title)
-
-    if candidates is None or candidates.empty:
-        return None
-
-    # Find the searched movie
-    selected = candidates[
-        candidates["title"].str.lower() == movie_title.lower()
+    movie = movies[
+        movies["imdb_id"] == imdb_id
     ]
 
-    if selected.empty:
+    if movie.empty:
+        print(f"{imdb_id} not found in AI dataset")
         return None
 
-    # Create embeddings
-    texts = candidates["features"].fillna("").tolist()
+    print(f"{imdb_id} found in AI dataset")
 
-    embeddings = create_embeddings(texts)
+    movie = movie.iloc[0]
 
-    query_embedding = create_embeddings(
-        [selected.iloc[0]["features"]]
-    )
+    query_embedding = model.encode(
+        [movie["features"]],
+        convert_to_numpy=True
+    ).astype("float32")
 
-    scores = util.cos_sim(
+    faiss.normalize_L2(query_embedding)
+
+    distances, indices = index.search(
         query_embedding,
-        embeddings
-    )[0]
-
-    candidates = candidates.copy()
-
-    candidates["score"] = scores.numpy()
-
-    candidates = candidates.sort_values(
-        by="score",
-        ascending=False
+        top_k + 1
     )
 
-    return candidates.head(top_k + 1)
+    recommendations = movies.iloc[
+        indices[0]
+    ].copy()
+
+    recommendations = recommendations[
+        recommendations["imdb_id"] != imdb_id
+    ]
+
+    return recommendations.head(top_k)
