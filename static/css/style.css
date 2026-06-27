@@ -402,3 +402,19 @@ form button{
     margin-top:10px;
     width:100%;
 }
+.movie-card {
+    display: block;
+    text-decoration: none;
+    color: white;
+}
+
+.movie-card h3,
+.movie-card p {
+    color: white;
+}
+
+.movie-card:hover,
+.movie-card:hover h3,
+.movie-card:hover p {
+    color: white;
+}

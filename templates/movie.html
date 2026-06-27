@@ -33,48 +33,22 @@
         </form>
     </div>
 </div>
-
 <hr>
-
 <h2>🤖 AI Recommended Movies</h2>
-
 <div class="recommendation-grid">
-
     {% if recommendations %}
-
         {% for rec in recommendations %}
-
-        <div class="movie-card">
-
+        <a href="{{ url_for('movie_detail', imdb_id=rec['imdb_id']) }}" class="movie-card">
             <img
                 src="https://image.tmdb.org/t/p/w500{{ rec['poster_path'] }}"
-                alt="{{ rec['title'] }}"
-            >
-
+                alt="{{ rec['title'] }}">
             <h3>{{ rec["title"] }}</h3>
-
             <p>⭐ {{ rec["vote_average"] }}</p>
-
-            <p>
-                {{ rec["release_date"][:4] if rec["release_date"] else "N/A" }}
-            </p>
-
-            <a href="/movie/{{ rec['imdb_id'] }}">
-                <button type="button">
-                    View Details
-                </button>
-            </a>
-
-        </div>
-
+            <p>{{ rec["release_date"][:4] if rec["release_date"] else "N/A" }}</p>
+        </a>
         {% endfor %}
-
     {% else %}
-
         <p>No recommendations found.</p>
-
     {% endif %}
-
 </div>
-
 {% endblock %}
