@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
-from recommendation_engine.recommender import recommend_movies, movies
+from recommendation_engine.recommender import recommend_movies
+from recommendation_engine.vector_store import load_vector_store
 from dotenv import load_dotenv
 from pathlib import Path
 import psycopg2
-from movie_categories import *
 import requests
 import os
+movies, _ = load_vector_store()
 
 # =========================
 # LOAD ENV VARIABLES
@@ -13,7 +14,6 @@ import os
 
 env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path)
-OMDB_API_KEY = os.getenv("OMDB_API_KEY")
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 app = Flask(__name__)
@@ -428,4 +428,6 @@ def watchlist():
 # =========================
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 7860))
+    app.run(host="0.0.0.0", port=port)
+    
