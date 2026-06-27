@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, session, flash, url_for
-from recommendation_engine.recommender import recommend_movies
+from recommendation_engine.recommender import recommend_movies, movies
 from dotenv import load_dotenv
 from pathlib import Path
 import psycopg2
+from movie_categories import *
 import requests
 import os
 
@@ -12,12 +13,12 @@ import os
 
 env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path)
-
 OMDB_API_KEY = os.getenv("OMDB_API_KEY")
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+print("Movies available:", len(movies))
 
 
 # =========================
@@ -38,47 +39,44 @@ def get_db_connection():
 # =========================
 # HOME PAGE
 # =========================
-
 @app.route("/")
 def home():
 
     if "user" not in session:
         return redirect("/login")
 
-    movie_names = [
-        "The Dark Knight",
-        "Interstellar",
-        "Joker",
-        "Avengers: Endgame"
-    ]
+    # Bollywood
+    bollywood = movies[
+        movies["original_language"] == "hi"
+    ].sample(12)
 
-    popular = []
+    # Action
+    action = movies[
+        movies["genres"].str.contains("Action", case=False, na=False)
+    ].sample(12)
 
-    for name in movie_names:
+    # Comedy
+    comedy = movies[
+        movies["genres"].str.contains("Comedy", case=False, na=False)
+    ].sample(12)
 
-        try:
+    # Horror
+    horror = movies[
+        movies["genres"].str.contains("Horror", case=False, na=False)
+    ].sample(12)
 
-            url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&t={name}"
-
-            response = requests.get(url, timeout=10)
-
-            data = response.json()
-            print(data)
-            if data.get("Response") == "True":
-
-                popular.append({
-                    "title": data["Title"],
-                    "poster": data["Poster"],
-                    "imdb_id": data["imdbID"]
-                })
-
-        except Exception as e:
-            print("Movie Error:", e)
-    print("HOME SESSION USER:", session.get("user"))        
+    # Romance
+    romance = movies[
+        movies["genres"].str.contains("Romance", case=False, na=False)
+    ].sample(12)
 
     return render_template(
         "index.html",
-        popular=popular,
+        bollywood=bollywood.to_dict(orient="records"),
+        action=action.to_dict(orient="records"),
+        comedy=comedy.to_dict(orient="records"),
+        horror=horror.to_dict(orient="records"),
+        romance=romance.to_dict(orient="records"),
         user=session.get("user")
     )
 
@@ -184,39 +182,51 @@ def logout():
 # =========================
 # SEARCH MOVIES
 # =========================
-
 @app.route("/search")
 def search():
 
     if "user" not in session:
         return redirect("/login")
 
-    movie_name = request.args.get("movie")
+    movie_name = request.args.get("movie", "").strip()
 
     if not movie_name:
         return redirect("/")
 
     try:
 
-        url = (
-            f"https://www.omdbapi.com/"
-            f"?apikey={OMDB_API_KEY}"
-            f"&t={movie_name}"
-        )
+        # Search movie in AI dataset
+        movie = movies[
+            movies["title"].str.lower() == movie_name.lower()
+        ]
 
-        response = requests.get(
-            url,
-            timeout=10
-        )
+        if not movie.empty:
 
-        movie = response.json()
-
-        if movie.get("Response") == "True":
+            movie = movie.iloc[0]
 
             return redirect(
                 url_for(
                     "movie_detail",
-                    imdb_id=movie["imdbID"]
+                    imdb_id=movie["imdb_id"]
+                )
+            )
+
+        # Partial search if exact title is not found
+        movie = movies[
+            movies["title"].str.lower().str.contains(
+                movie_name.lower(),
+                na=False
+            )
+        ]
+
+        if not movie.empty:
+
+            movie = movie.iloc[0]
+
+            return redirect(
+                url_for(
+                    "movie_detail",
+                    imdb_id=movie["imdb_id"]
                 )
             )
 
@@ -248,23 +258,48 @@ def movie_detail(imdb_id):
     if "user" not in session:
         return redirect("/login")
 
-    url = f"https://www.omdbapi.com/?apikey={OMDB_API_KEY}&i={imdb_id}"
+    # Search movie in AI dataset
+    movie = movies[
+        movies["imdb_id"] == imdb_id
+    ]
 
-    recommendations = []
+    if movie.empty:
+        flash("Movie not found.", "error")
+        return redirect("/")
 
-    try:
-        response = requests.get(url, timeout=10)
-        movie = response.json()
+    movie = movie.iloc[0]
 
-        if movie.get("Response") == "True":
-            recommendations = recommend_movies(imdb_id)
-            if recommendations is not None:
-                recommendations = recommendations.to_dict(orient="records")
-            else:
-                recommendations = []
-    except Exception as e:
-        print("Movie Detail Error:", e)
-        movie = None
+    # Convert Pandas row into dictionary
+    movie = {
+    "imdbID": movie["imdb_id"],
+    "Title": movie["title"],
+    "Plot": movie["overview"],
+    "Genre": movie["genres"],
+    "Actors": movie["cast"],
+    "Director": movie["director"],
+    "Released": movie["release_date"],
+    "Year": movie["release_date"][:4] if movie["release_date"] else "N/A",
+    "Language": movie["original_language"],
+    "Runtime": "N/A",
+    "imdbRating": movie["vote_average"],
+    "Poster": f"https://image.tmdb.org/t/p/w500{movie['poster_path']}"
+}
+
+    # AI Recommendations
+    recommendations = recommend_movies(imdb_id)
+
+    if recommendations is not None:
+
+        recommendations = recommendations.to_dict(orient="records")
+
+        for rec in recommendations:
+
+            rec["Poster"] = (
+                f"https://image.tmdb.org/t/p/w500{rec['poster_path']}"
+            )
+
+    else:
+        recommendations = []
 
     return render_template(
         "movie.html",

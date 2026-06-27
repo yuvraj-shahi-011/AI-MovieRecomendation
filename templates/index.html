@@ -6,6 +6,7 @@ MovieHub AI
 
 {% block content %}
 
+<!-- Hero Section -->
 <section class="hero">
 
     <h1>Discover Your Next Favorite Movie</h1>
@@ -28,20 +29,155 @@ MovieHub AI
 
 </section>
 
+
+<!-- Bollywood -->
+
 <section class="movies-section">
 
-    <h2>🎥 Popular Movies</h2>
+    <h2>🇮🇳 Bollywood Movies</h2>
 
-    <div class="movie-grid">
+    <div class="movie-row">
 
-        {% for movie in popular %}
+        {% for movie in bollywood %}
 
-       <a href="/movie/{{ movie['imdb_id'] }}" class="movie-link">
-        <div class="movie-card">
-            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-            <h3>{{ movie.title }}</h3>
-        </div>
-    </a>
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500{{ movie['poster_path'] }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- Action -->
+
+<section class="movies-section">
+
+    <h2>💥 Action Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in action %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500{{ movie['poster_path'] }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- Comedy -->
+
+<section class="movies-section">
+
+    <h2>😂 Comedy Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in comedy %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500{{ movie['poster_path'] }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- Horror -->
+
+<section class="movies-section">
+
+    <h2>👻 Horror Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in horror %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500{{ movie['poster_path'] }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- Romance -->
+
+<section class="movies-section">
+
+    <h2>❤️ Romance Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in romance %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500{{ movie['poster_path'] }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
         {% endfor %}
 
     </div>
