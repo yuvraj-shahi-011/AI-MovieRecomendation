@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ movie.Title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="movie-detail">
+    <img src="{{ movie.Poster }}" alt="{{ movie.Title }}">
+
+    <div class="movie-info">
+        <h1>{{ movie.Title }}</h1>
+
+        <p><strong>Release Date:</strong> {{ movie.Released }}</p>
+        <p><strong>Genre:</strong> {{ movie.Genre }}</p>
+        <p><strong>Language:</strong> {{ movie.Language if movie.Language else "N/A" }}</p>
+        <p><strong>IMDb Rating:</strong> ⭐ {{ movie.imdbRating }}</p>
+        <p><strong>Director:</strong> {{ movie.Director }}</p>
+        <p><strong>Actors:</strong> {{ movie.Actors }}</p>
+
+        <p><strong>Plot:</strong></p>
+        <p>{{ movie.Plot }}</p>
+
+        <form action="/add_watchlist" method="POST">
+            <input type="hidden" name="title" value="{{ movie.Title }}">
+            <input type="hidden" name="poster" value="{{ movie.Poster }}">
+            <input type="hidden" name="content_id" value="{{ movie.imdbID }}">
+            <input type="hidden" name="content_type" value="movie">
+
+            <button type="submit" class="watchlist-btn">
+                ⭐ Add to Watchlist
+            </button>
+        </form>
+    </div>
+</div>
+
+{% if video_id %}
+<div class="trailer-section">
+
+    <h2>🎬 Official Trailer</h2>
+
+    <div class="trailer-player">
+        <iframe
+            src="https://www.youtube.com/embed/{{ video_id }}"
+            title="{{ movie.Title }} Trailer"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen
+            loading="lazy">
+        </iframe>
+    </div>
+
+</div>
+{% endif %}
+
+<hr>
+<h2>🤖 AI Recommended Movies</h2>
+<div class="recommendation-grid">
+    {% if recommendations %}
+        {% for rec in recommendations %}
+        <a href="{{ url_for('movie_detail', imdb_id=rec['imdb_id']) }}" class="movie-card">
+            <img
+                src="{{ rec['poster_path']|poster_url }}"
+                alt="{{ rec['title'] }}">
+            <h3>{{ rec["title"] }}</h3>
+            <p>⭐ {{ rec["vote_average"] }}</p>
+            <p>{{ rec["release_date"][:4] if rec["release_date"] else "N/A" }}</p>
+        </a>
+        {% endfor %}
+    {% else %}
+        <p>No recommendations found.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,337 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+
+{% if edit %}
+Edit Movie
+{% else %}
+Add Movie
+{% endif %}
+
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-container">
+
+    <div class="form-card">
+
+        <h1>
+
+        {% if edit %}
+
+            ✏️ Edit Movie
+
+        {% else %}
+
+            🎬 Add New Movie
+
+        {% endif %}
+
+        </h1>
+
+        <form
+            action="{% if edit %}/admin/movie/edit/{{ movie.imdb_id }}{% else %}/admin/movie/add{% endif %}"
+            method="POST"
+            enctype="multipart/form-data">
+
+            <div class="form-grid">
+
+                <!-- LEFT COLUMN -->
+
+                <div>
+
+                    <label>Movie Title *</label>
+
+                    <input
+                        type="text"
+                        name="title"
+                        value="{{ movie.title if edit else '' }}"
+                        required>
+
+
+                    <label>IMDb ID *</label>
+
+                    <input
+                        type="text"
+                        name="imdb_id"
+                        value="{{ movie.imdb_id if edit else '' }}"
+                        {% if edit %}readonly{% endif %}
+                        required>
+
+
+                    <label>Genres *</label>
+
+<div class="genre-grid">
+
+{% set selected = movie.genres.split(",") if edit else [] %}
+
+{% for genre in genres %}
+
+<label class="genre-item">
+
+<input
+
+type="checkbox"
+
+name="genres"
+
+value="{{ genre }}"
+
+{% if genre in selected %}
+checked
+{% endif %}
+
+>
+
+{{ genre }}
+
+</label>
+
+{% endfor %}
+
+</div>
+
+
+                    <label>Cast *</label>
+
+                    <textarea
+                        name="cast"
+                        rows="4"
+                        required>{{ movie.cast if edit else '' }}</textarea>
+
+
+                    <label>Director *</label>
+
+                    <input
+                        type="text"
+                        name="director"
+                        value="{{ movie.director if edit else '' }}"
+                        required>
+
+
+                    <label>Overview *</label>
+
+                    <textarea
+                        name="overview"
+                        rows="8"
+                        required>{{ movie.overview if edit else '' }}</textarea>
+
+                </div>
+
+                <!-- RIGHT COLUMN -->
+
+                <div>
+
+                    <label>Release Date</label>
+
+                    <input
+                        type="date"
+                        name="release_date"
+                        value="{{ movie.release_date if edit else '' }}">
+
+
+                    <label>Language</label>
+
+                    <select name="original_language">
+
+                        <option value="en"
+                        {% if edit and movie.original_language=="en" %}selected{% endif %}>
+                            English
+                        </option>
+
+                        <option value="hi"
+                        {% if edit and movie.original_language=="hi" %}selected{% endif %}>
+                            Hindi
+                        </option>
+
+                        <option value="ja"
+                        {% if edit and movie.original_language=="ja" %}selected{% endif %}>
+                            Japanese
+                        </option>
+
+                        <option value="ko"
+                        {% if edit and movie.original_language=="ko" %}selected{% endif %}>
+                            Korean
+                        </option>
+
+                        <option value="fr"
+                        {% if edit and movie.original_language=="fr" %}selected{% endif %}>
+                            French
+                        </option>
+
+                        <option value="es"
+                        {% if edit and movie.original_language=="es" %}selected{% endif %}>
+                            Spanish
+                        </option>
+
+                    </select>
+
+
+                    <label>Rating</label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        min="0"
+                        max="10"
+                        name="vote_average"
+                        value="{{ movie.vote_average if edit else '' }}">
+
+
+                    <label>Popularity</label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        name="popularity"
+                        value="{{ movie.popularity if edit else '' }}">
+
+
+                    <label>Runtime (Minutes)</label>
+
+                    <input
+                        type="number"
+                        name="runtime"
+                        value="{{ movie.runtime if edit else '' }}">
+
+
+                    <label>Status</label>
+
+                    <select name="status">
+
+                        <option value="Released"
+                        {% if edit and movie.status=="Released" %}selected{% endif %}>
+                            Released
+                        </option>
+
+                        <option value="Upcoming"
+                        {% if edit and movie.status=="Upcoming" %}selected{% endif %}>
+                            Upcoming
+                        </option>
+
+                    </select>
+
+
+                    <label>Trailer URL</label>
+
+                    <input
+                        type="url"
+                        name="trailer_url"
+                        value="{{ movie.trailer_url if edit else '' }}">
+                                            <hr>
+
+                    <h2>Poster</h2>
+
+                    <label>Movie Poster</label>
+
+                    <input
+                        type="file"
+                        name="poster"
+                        accept="image/*"
+                        onchange="previewPoster(event)">
+
+                    {% if edit and movie.poster_path %}
+
+                        <img
+                            id="posterPreview"
+                            class="preview-image"
+                            src="{{ url_for('static', filename='uploads/posters/' + movie.poster_path) }}">
+
+                    {% else %}
+
+                        <img
+                            id="posterPreview"
+                            class="preview-image">
+
+                    {% endif %}
+
+                    <hr>
+
+                    <div class="checkbox-row">
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="featured"
+
+                                {% if edit and movie.featured %}
+                                checked
+                                {% endif %}>
+
+                            Featured Movie
+
+                        </label>
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="trending"
+
+                                {% if edit and movie.trending %}
+                                checked
+                                {% endif %}>
+
+                            Trending Movie
+
+                        </label>
+
+                    </div>
+
+                    <br>
+
+                    <button
+                        type="submit"
+                        class="save-btn">
+
+                        {% if edit %}
+
+                            💾 Update Movie
+
+                        {% else %}
+
+                            💾 Save Movie
+
+                        {% endif %}
+
+                    </button>
+
+                    <a
+                        href="/admin/movies"
+                        class="cancel-btn">
+
+                        Cancel
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+
+function previewPoster(event){
+
+    const preview = document.getElementById("posterPreview");
+
+    preview.src = URL.createObjectURL(
+
+        event.target.files[0]
+
+    );
+
+    preview.style.display = "block";
+
+}
+
+</script>
+
+{% endblock %}

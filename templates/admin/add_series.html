@@ -1,0 +1,247 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+{% if edit %}
+Edit TV Series
+{% else %}
+Add TV Series
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-container">
+
+<div class="form-card">
+
+<h1>
+
+{% if edit %}
+✏️ Edit TV Series
+{% else %}
+📺 Add TV Series
+{% endif %}
+
+</h1>
+
+<form
+action="{% if edit %}/admin/series/edit/{{ tv.id }}{% else %}/admin/series/add{% endif %}"
+method="POST"
+enctype="multipart/form-data">
+
+<div class="form-grid">
+
+<div>
+
+<label>Series Name *</label>
+
+<input
+type="text"
+name="name"
+value="{{ tv.name if edit else '' }}"
+required>
+
+<label>Created By</label>
+
+<input
+type="text"
+name="created_by"
+value="{{ tv.created_by if edit else '' }}">
+
+<label>Genres</label>
+
+<input
+type="text"
+name="genres"
+value="{{ tv.genres if edit else '' }}">
+
+<label>Overview</label>
+
+<textarea
+name="overview"
+rows="8">{{ tv.overview if edit else '' }}</textarea>
+
+</div>
+
+<div>
+
+<label>First Air Date</label>
+
+<input
+type="date"
+name="first_air_date"
+value="{{ tv.first_air_date if edit else '' }}">
+
+<label>Last Air Date</label>
+
+<input
+type="date"
+name="last_air_date"
+value="{{ tv.last_air_date if edit else '' }}">
+
+<label>Language</label>
+
+<input
+type="text"
+name="original_language"
+value="{{ tv.original_language if edit else '' }}">
+
+<label>Rating</label>
+
+<input
+type="number"
+step="0.1"
+name="vote_average"
+value="{{ tv.vote_average if edit else '' }}">
+
+<label>Popularity</label>
+
+<input
+type="number"
+step="0.1"
+name="popularity"
+value="{{ tv.popularity if edit else '' }}">
+
+<label>Number of Seasons</label>
+
+<input
+type="number"
+name="number_of_seasons"
+value="{{ tv.number_of_seasons if edit else '' }}">
+
+<label>Number of Episodes</label>
+
+<input
+type="number"
+name="number_of_episodes"
+value="{{ tv.number_of_episodes if edit else '' }}">
+
+<label>Status</label>
+
+<select name="status">
+
+<option value="Returning Series"
+{% if edit and tv.status=="Returning Series" %}selected{% endif %}>
+Returning Series
+</option>
+
+<option value="Ended"
+{% if edit and tv.status=="Ended" %}selected{% endif %}>
+Ended
+</option>
+
+<option value="Canceled"
+{% if edit and tv.status=="Canceled" %}selected{% endif %}>
+Canceled
+</option>
+
+<option value="Planned"
+{% if edit and tv.status=="Planned" %}selected{% endif %}>
+Planned
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<hr>
+
+<h2>Poster</h2>
+
+<input
+type="file"
+name="poster"
+accept="image/*"
+onchange="previewPoster(event)">
+
+{% if edit and tv.poster_path %}
+
+<img
+
+id="posterPreview"
+
+class="preview-image"
+
+src="{{ url_for('static', filename='uploads/posters/' + tv.poster_path) }}">
+
+{% else %}
+
+<img
+id="posterPreview"
+class="preview-image">
+
+{% endif %}
+<div class="checkbox-row">
+
+    <label>
+
+        <input
+            type="checkbox"
+            name="featured"
+
+            {% if edit and tv.featured %}
+            checked
+            {% endif %}>
+
+        Featured Series
+
+    </label>
+
+    <label>
+
+        <input
+            type="checkbox"
+            name="trending"
+
+            {% if edit and tv.trending %}
+            checked
+            {% endif %}>
+
+        Trending Series
+
+    </label>
+
+</div>
+<br>
+
+<button
+class="save-btn"
+type="submit">
+
+{% if edit %}
+💾 Update Series
+{% else %}
+💾 Save Series
+{% endif %}
+
+</button>
+
+<a
+href="/admin/series"
+class="cancel-btn">
+
+Cancel
+
+</a>
+
+</form>
+
+
+</div>
+
+</div>
+
+<script>
+
+function previewPoster(event){
+
+document.getElementById("posterPreview").src=
+URL.createObjectURL(event.target.files[0]);
+
+}
+
+</script>
+
+{% endblock %}

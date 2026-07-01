@@ -1,0 +1,182 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+
+Manage Movies
+
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-container">
+
+    <div class="admin-header">
+
+        <h1>🎬 Movie Management</h1>
+
+    </div>
+
+    <!-- Toolbar -->
+
+    <div class="movie-toolbar">
+
+        <form method="GET">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search Movie..."
+                value="{{ search }}">
+
+            <button type="submit">
+
+                🔍 Search
+
+            </button>
+
+        </form>
+
+        <a href="/admin/movie/add"
+           class="admin-btn">
+
+            + Add Movie
+
+        </a>
+
+    </div>
+
+    <!-- Movie Table -->
+
+    <table class="admin-table">
+
+        <thead>
+
+            <tr>
+
+                <th>Poster</th>
+
+                <th>Title</th>
+
+                <th>Year</th>
+
+                <th>Rating</th>
+
+                <th>Language</th>
+
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for movie in movies %}
+
+        <tr>
+
+            <td>
+
+    {% if movie.poster_path %}
+
+        <img
+            src="{{ movie.poster_path|poster_url }}"
+            class="admin-poster">
+
+    {% else %}
+
+        <div class="no-poster">
+            No Poster
+        </div>
+
+    {% endif %}
+
+</td>
+
+            <td>
+
+                {{ movie.title }}
+
+            </td>
+
+            <td>
+
+                {{ movie.release_date[:4] if movie.release_date else "N/A" }}
+
+            </td>
+
+            <td>
+
+                ⭐ {{ movie.vote_average }}
+
+            </td>
+
+            <td>
+
+                {{ movie.original_language|upper }}
+
+            </td>
+
+            <td class="action-buttons">
+
+                <a
+                    href="/admin/movie/edit/{{ movie.imdb_id }}"
+                    class="edit-btn">
+
+                    ✏ Edit
+
+                </a>
+
+                <a
+                    href="/admin/movie/delete/{{ movie.imdb_id }}"
+                    class="delete-btn">
+
+                    🗑 Delete
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <!-- Pagination -->
+
+    <div class="pagination">
+
+        {% if page > 1 %}
+
+        <a href="?page={{ page-1 }}&search={{ search }}">
+
+            ← Previous
+
+        </a>
+
+        {% endif %}
+
+        <span>
+
+            Page {{ page }} of {{ total_pages }}
+
+        </span>
+
+        {% if page < total_pages %}
+
+        <a href="?page={{ page+1 }}&search={{ search }}">
+
+            Next →
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

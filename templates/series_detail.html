@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ series.Title }}
+{% endblock %}
+
+{% block content %}
+
+<div class="movie-detail">
+
+    <img src="{{ series.Poster }}" alt="{{ series.Title }}">
+
+    <div class="movie-info">
+
+        <h1>{{ series.Title }}</h1>
+
+        <p><strong>First Air Date:</strong> {{ series.Released }}</p>
+
+        <p><strong>Genre:</strong> {{ series.Genre }}</p>
+
+        <p><strong>Language:</strong> {{ series.Language }}</p>
+
+        <p><strong>Rating:</strong> ⭐ {{ series.imdbRating }}</p>
+
+        <p><strong>Seasons:</strong> {{ series.Seasons }}</p>
+
+        <p><strong>Episodes:</strong> {{ series.Episodes }}</p>
+
+        <p><strong>Plot:</strong></p>
+
+        <p>{{ series.Plot }}</p>
+        <form action="/add_watchlist" method="POST">
+
+    <input type="hidden" name="title" value="{{ series.Title }}">
+    <input type="hidden" name="poster" value="{{ series.Poster }}">
+    <input type="hidden" name="content_id" value="{{ series.seriesID }}">
+    <input type="hidden" name="content_type" value="series">
+
+    <button type="submit" class="watchlist-btn">
+        ⭐ Add to Watchlist
+    </button>
+
+</form>
+
+    </div>
+
+</div>
+
+<hr>
+
+<h2>🤖 AI Recommended TV Series</h2>
+
+<div class="recommendation-grid">
+
+{% if recommendations %}
+
+    {% for rec in recommendations %}
+
+    <a href="{{ url_for('series_detail', series_id=rec['series_id']) }}" class="movie-card">
+
+        <img
+            src="{{ rec['poster_path']|poster_url }}"
+            alt="{{ rec['title'] }}">
+
+        <h3>{{ rec['title'] }}</h3>
+
+        <p>⭐ {{ rec['vote_average'] }}</p>
+
+        <p>{{ rec['release_date'][:4] if rec['release_date'] else "N/A" }}</p>
+
+    </a>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No recommendations found.</p>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

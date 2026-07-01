@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}
+Search | WatchWise AI
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <h1>🔍 Search Movies & TV Series</h1>
+
+    <form action="/search" method="GET" class="search-box">
+
+        <input
+            type="text"
+            name="q"
+            placeholder="Search movies, TV series, actors, directors..."
+            value="{{ query }}"
+            required>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+</section>
+
+{% if query %}
+
+<!-- ================= MOVIES ================= -->
+
+<h2 class="section-title">🎬 Movies</h2>
+
+<div class="recommendation-grid">
+
+{% if movies %}
+
+    {% for movie in movies %}
+
+    <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}"
+       class="movie-card">
+
+        <img
+            src="{{ movie['poster_path']|poster_url }}"
+            alt="{{ movie['title'] }}">
+
+        <h3>{{ movie["title"] }}</h3>
+
+        <p>⭐ {{ movie["vote_average"] }}</p>
+
+        <p>
+            {{ movie["release_date"][:4] if movie["release_date"] else "N/A" }}
+        </p>
+
+    </a>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No movies found.</p>
+
+{% endif %}
+
+</div>
+
+<hr style="margin:50px 0;">
+
+<!-- ================= TV SERIES ================= -->
+
+<h2 class="section-title">📺 TV Series</h2>
+
+<div class="recommendation-grid">
+
+{% if series %}
+
+    {% for tv in series %}
+
+    <a href="{{ url_for('series_detail',
+        series_id=tv['series_id']) }}"
+       class="movie-card">
+
+        <img
+            src="{{ tv['poster_path']|poster_url }}"
+            alt="{{ tv['title'] }}">
+
+        <h3>{{ tv["title"] }}</h3>
+
+        <p>⭐ {{ tv["vote_average"] }}</p>
+
+        <p>
+            {{ tv["release_date"][:4] if tv["release_date"] != "N/A" else "N/A" }}
+        </p>
+
+    </a>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No TV series found.</p>
+
+{% endif %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}

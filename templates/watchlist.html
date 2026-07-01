@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}
+My Watchlist
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <h1>⭐ My Watchlist</h1>
+    <p>Your saved Movies & TV Series.</p>
+</section>
+
+<div class="movie-grid">
+
+{% if watchlist_items %}
+
+    {% for item in watchlist_items %}
+
+    <div class="movie-card">
+
+        {% if item[3] == "movie" %}
+
+            <a href="{{ url_for('movie_detail', imdb_id=item[2]) }}">
+
+        {% else %}
+
+            <a href="{{ url_for('series_detail', series_id=item[2]|int) }}">
+
+        {% endif %}
+
+                <img src="{{ item[1] }}" alt="{{ item[0] }}">
+
+            </a>
+
+        {% if item[3] == "movie" %}
+            <p>🎬 Movie</p>
+        {% else %}
+            <p>📺 TV Series</p>
+        {% endif %}
+
+        <h3>{{ item[0] }}</h3>
+
+        <a href="{{ url_for('remove_watchlist',
+            content_type=item[3],
+            content_id=item[2]) }}">
+
+            <button class="remove-btn">
+                🗑 Remove
+            </button>
+
+        </a>
+
+    </div>
+
+    {% endfor %}
+
+{% else %}
+
+    <h2 style="text-align:center;margin-top:40px;">
+        Your watchlist is empty.
+    </h2>
+
+{% endif %}
+
+</div>
+
+{% endblock %}

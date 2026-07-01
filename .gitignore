@@ -1,0 +1,15 @@
+# Ignore models
+models/
+
+# Ignore datasets
+dataset/
+*.faiss
+*.npy
+
+# Python virtual environment
+venv/
+.venv/
+
+# Cache
+__pycache__/
+*.pyc

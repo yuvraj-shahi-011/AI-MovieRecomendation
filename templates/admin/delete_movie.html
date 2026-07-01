@@ -1,0 +1,67 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+
+Delete Movie
+
+{% endblock %}
+
+{% block content %}
+
+<div class="delete-card">
+
+<h1>
+
+🗑 Delete Movie
+
+</h1>
+
+<p>
+
+Are you sure you want to delete
+
+</p>
+
+<h2>
+
+{{ movie.title }}
+
+</h2>
+
+{% if movie.poster_path %}
+
+<img
+
+src="{{ url_for('static', filename='uploads/posters/' + movie.poster_path) }}"
+
+class="delete-poster">
+
+{% endif %}
+
+<form method="POST">
+
+<button
+
+class="delete-btn"
+
+type="submit">
+
+Delete Movie
+
+</button>
+
+<a
+
+href="/admin/movies"
+
+class="cancel-btn">
+
+Cancel
+
+</a>
+
+</form>
+
+</div>
+
+{% endblock %}

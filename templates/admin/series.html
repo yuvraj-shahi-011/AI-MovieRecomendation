@@ -1,0 +1,202 @@
+{% extends "admin/base.html" %}
+
+{% block title %}
+
+Manage TV Series
+
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-container">
+
+    <div class="admin-header">
+
+        <h1>📺 TV Series Management</h1>
+
+    </div>
+
+    <div class="movie-toolbar">
+
+        <form method="GET">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search TV Series..."
+                value="{{ search }}">
+
+            <button type="submit">
+
+                🔍 Search
+
+            </button>
+
+        </form>
+
+        <a
+            href="/admin/series/add"
+            class="admin-btn">
+
+            + Add Series
+
+        </a>
+
+    </div>
+
+    <table class="admin-table">
+
+        <thead>
+
+            <tr>
+
+                <th>Poster</th>
+
+                <th>Title</th>
+
+                <th>Seasons</th>
+
+                <th>Episodes</th>
+
+                <th>Status</th>
+
+                <th>Rating</th>
+
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        {% for tv in series %}
+
+        <tr>
+
+            <td>
+
+            {% if tv.poster_path %}
+
+{% if tv.poster_path.startswith("/") %}
+
+<img
+src="https://image.tmdb.org/t/p/w200{{ tv.poster_path }}"
+class="admin-poster">
+
+{% else %}
+
+<img
+src="{{ url_for('static',
+filename='uploads/posters/' + tv.poster_path) }}"
+class="admin-poster">
+
+{% endif %}
+
+{% else %}
+
+<div class="no-poster">
+
+No Poster
+
+</div>
+
+{% endif %}
+
+            </td>
+
+            <td>
+
+                {{ tv.name }}
+
+            </td>
+
+            <td>
+
+                {{ tv.number_of_seasons }}
+
+            </td>
+
+            <td>
+
+                {{ tv.number_of_episodes }}
+
+            </td>
+
+            <td>
+
+                {{ tv.status }}
+
+            </td>
+
+            <td>
+
+                ⭐ {{ tv.vote_average }}
+
+            </td>
+
+            <td class="action-buttons">
+
+                <a
+
+                href="/admin/series/edit/{{ tv.id }}"
+
+                class="edit-btn">
+
+                    ✏ Edit
+
+                </a>
+
+                <a
+
+                href="/admin/series/delete/{{ tv.id }}"
+
+                class="delete-btn">
+
+                    🗑 Delete
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <div class="pagination">
+
+        {% if page > 1 %}
+
+        <a href="?page={{ page-1 }}&search={{ search }}">
+
+            ← Previous
+
+        </a>
+
+        {% endif %}
+
+        <span>
+
+            Page {{ page }} of {{ total_pages }}
+
+        </span>
+
+        {% if page < total_pages %}
+
+        <a href="?page={{ page+1 }}&search={{ search }}">
+
+            Next →
+
+        </a>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

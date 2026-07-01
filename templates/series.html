@@ -1,0 +1,449 @@
+{% extends "base.html" %}
+
+{% block title %}
+WatchWise AI | TV Series
+{% endblock %}
+
+{% block content %}
+
+<!-- =========================
+HERO
+========================= -->
+
+<section class="hero">
+
+    <h1>Discover Your Next Favorite TV Series</h1>
+
+    <p>AI Powered TV Series Recommendation Platform</p>
+
+    <form action="/search" method="GET" class="search-box">
+
+        <input
+            type="text"
+            name="q"
+            placeholder="Search Movies & TV Series..."
+            required>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+</section>
+
+<!-- =========================
+TRENDING
+========================= -->
+
+<section class="movies-section">
+
+    <h2>🔥 Trending TV Series</h2>
+
+    <div class="movie-row">
+
+        {% for movie in trending %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+TOP RATED
+========================= -->
+
+<section class="movies-section">
+
+    <h2>⭐ Top Rated TV Series</h2>
+
+    <div class="movie-row">
+
+        {% for movie in top_rated %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+POPULAR
+========================= -->
+
+<section class="movies-section">
+
+    <h2>📈 Most Popular TV Series</h2>
+
+    <div class="movie-row">
+
+        {% for movie in popular %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+INDIAN
+========================= -->
+
+<section class="movies-section">
+
+    <h2>🇮🇳 Indian TV Series</h2>
+
+    <div class="movie-row">
+
+        {% for movie in indian %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+DRAMA
+========================= -->
+
+<section class="movies-section">
+
+    <h2>🎭 Drama</h2>
+
+    <div class="movie-row">
+
+        {% for movie in drama %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+<!-- =========================
+COMEDY
+========================= -->
+
+<section class="movies-section">
+
+    <h2>😂 Comedy</h2>
+
+    <div class="movie-row">
+
+        {% for movie in comedy %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+ACTION & ADVENTURE
+========================= -->
+
+<section class="movies-section">
+
+    <h2>🔫 Action & Adventure</h2>
+
+    <div class="movie-row">
+
+        {% for movie in action %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+CRIME
+========================= -->
+
+<section class="movies-section">
+
+    <h2>🕵 Crime</h2>
+
+    <div class="movie-row">
+
+        {% for movie in crime %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+FANTASY
+========================= -->
+
+<section class="movies-section">
+
+    <h2>🧙 Fantasy</h2>
+
+    <div class="movie-row">
+
+        {% for movie in fantasy %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+ROMANCE
+========================= -->
+
+<section class="movies-section">
+
+    <h2>❤️ Romance</h2>
+
+    <div class="movie-row">
+
+        {% for movie in romance %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+<!-- =========================
+ANIMATION
+========================= -->
+
+<section class="movies-section">
+
+    <h2>🎨 Animation</h2>
+
+    <div class="movie-row">
+
+        {% for movie in animation %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+FAMILY
+========================= -->
+
+<section class="movies-section">
+
+    <h2>👨‍👩‍👧 Family</h2>
+
+    <div class="movie-row">
+
+        {% for movie in family %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- =========================
+MYSTERY
+========================= -->
+
+<section class="movies-section">
+
+    <h2>🔎 Mystery</h2>
+
+    <div class="movie-row">
+
+        {% for movie in mystery %}
+
+        <a href="{{ url_for('series_detail', series_id=movie['series_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

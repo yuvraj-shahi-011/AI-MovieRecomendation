@@ -1,0 +1,636 @@
+{% extends "base.html" %}
+
+{% block title %}
+WatchWise AI
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero">
+
+    <h1>Discover Your Next Favorite Movie and TV Series</h1>
+
+    <p>AI Powered Movie & TV Series Recommendation Platform</p>
+
+    <form action="/search" method="GET" class="search-box">
+
+        <input
+            type="text"
+            name="movie"
+            placeholder="Search Movies..."
+            required>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+</section>
+
+<!-- Trending -->
+
+<section class="movies-section">
+
+    <h2>🔥 Trending Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in trending_movies %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- Bollywood -->
+
+<section class="movies-section">
+
+    <h2>🇮🇳 Bollywood Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in bollywood %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Fantasy -->
+
+<section class="movies-section">
+
+    <h2>🧙 Fantasy Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in fantasy %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Action -->
+
+<section class="movies-section">
+
+    <h2>💥 Action Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in action %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- Comedy -->
+
+<section class="movies-section">
+
+    <h2>😂 Comedy Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in comedy %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- Horror -->
+
+<section class="movies-section">
+
+    <h2>👻 Horror Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in horror %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- Romance -->
+
+<section class="movies-section">
+
+    <h2>❤️ Romance Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in romance %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Thriller -->
+
+<section class="movies-section">
+
+    <h2>🔥 Thriller Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in thriller %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Crime -->
+
+<section class="movies-section">
+
+    <h2>🕵️ Crime Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in crime %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Family -->
+
+<section class="movies-section">
+
+    <h2>👨‍👩‍👧 Family Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in family %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Animation -->
+
+<section class="movies-section">
+
+    <h2>🎨 Animation Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in animation %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Adventure -->
+
+<section class="movies-section">
+
+    <h2>🏕️ Adventure Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in adventure %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Science Fiction -->
+
+<section class="movies-section">
+
+    <h2>🚀 Science Fiction Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in science_fiction %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Mystery -->
+
+<section class="movies-section">
+
+    <h2>🔎 Mystery Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in mystery %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Documentary -->
+
+<section class="movies-section">
+
+    <h2>🎬 Documentary Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in documentary %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- TV Movie -->
+
+<section class="movies-section">
+
+    <h2>📺 TV Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in tv_movie %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Music -->
+
+<section class="movies-section">
+
+    <h2>🎵 Music Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in music %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- History -->
+
+<section class="movies-section">
+
+    <h2>📜 History Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in history %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- War -->
+
+<section class="movies-section">
+
+    <h2>⚔️ War Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in war %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+<!-- Western -->
+
+<section class="movies-section">
+
+    <h2>🤠 Western Movies</h2>
+
+    <div class="movie-row">
+
+        {% for movie in western %}
+
+        <a href="{{ url_for('movie_detail', imdb_id=movie['imdb_id']) }}" class="movie-link">
+
+            <div class="movie-card">
+
+                <img
+                    src="{{ movie['poster_path']|poster_url }}"
+                    alt="{{ movie['title'] }}">
+
+                <h3>{{ movie['title'] }}</h3>
+
+            </div>
+
+        </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}
